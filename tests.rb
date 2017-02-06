@@ -40,12 +40,20 @@ class CaffeineTest < MiniTest::Test
 
   def test_humans_can_drink_espresso
     chris = Human.new "Chris"
-    tassk = Coffee.new("The Asskicker", drink = 1)
+    tassk = Coffee.new("The Asskicker", 1)
     chris.buy tassk
 
     chris.drink_espresso!
     assert tassk.empty?
-    assert chris.alertness > 0.3
+    while chris.alertness <= 2.0 do
+      if tassk.empty? == true
+        chris.buy tassk
+        chris.drink_espresso!
+      else
+        chris.drink_espresso!
+      end
+    end
+    assert chris.alertness > 0.9
   end
 
   def test_humans_can_drink_tea
@@ -58,7 +66,6 @@ class CaffeineTest < MiniTest::Test
     emily.drink_tea!
 
     while emily.alertness <= 2.0 do
-      puts emily.alertness.inspect
       if mast.empty? == true
         emily.buy_tea mast
         emily.drink_tea!
