@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 
 require './human'
+require './tea'
 require './coffee'
 
 class CaffeineTest < MiniTest::Test
@@ -35,5 +36,38 @@ class CaffeineTest < MiniTest::Test
     3.times { trevor.drink! }
     assert tsmf.empty?
     assert trevor.alertness > 0.9
+  end
+
+  def test_humans_can_drink_espresso
+    chris = Human.new "Chris"
+    tassk = Coffee.new("The Asskicker", drink = 1)
+    chris.buy tassk
+
+    chris.drink_espresso!
+    assert tassk.empty?
+    assert chris.alertness > 0.3
+  end
+
+  def test_humans_can_drink_tea
+    emily = Human.new "Emily"
+    refute emily.has_coffee?
+    assert emily.needs_coffee?
+    mast = Tea.new("McAlister's Sweet Tea")
+    emily.buy_tea mast
+
+    emily.drink_tea!
+
+    while emily.alertness <= 2.0 do
+      puts emily.alertness.inspect
+      if mast.empty? == true
+        emily.buy_tea mast
+        emily.drink_tea!
+      else
+        emily.drink_tea!
+      end
+    end
+
+
+    assert emily.alertness > 2.0
   end
 end
